@@ -42,7 +42,7 @@ class ProxyServer:
                     proxies.append(ip_add)
             return web.json_response({'proxies': proxies}, status=200)
         except Exception as e:
-            return web.json_response({'errors': e}, status=500)
+            return web.json_response({'errors': "Was unable to access proxy collection"}, status=500)
 
     async def add_proxy(self, request):
         data = await request.json()
@@ -52,7 +52,7 @@ class ProxyServer:
         try:
             await self.mongo_collection.insert_one(input_data)
         except Exception as e:
-            return web.json_response({'errors': e}, status=500)
+            return web.json_response({'errors': "Was unable to insert proxy"}, status=500)
         return web.json_response({'Status': 'Proxy Inserted'})
 
     async def delete_proxy(self, request):
@@ -64,7 +64,7 @@ class ProxyServer:
             proxy = input_data.get('proxy')
             await self.mongo_collection.remove({'proxy': proxy})
         except Exception as e:
-            return web.json_response({'errors': e}, status=500)
+            return web.json_response({'errors': "Was unable to delete proxy"}, status=500)
         return web.json_response({'Status': 'Proxy Deleted'}, status=200)
 
     async def test_request(self, proxy):
